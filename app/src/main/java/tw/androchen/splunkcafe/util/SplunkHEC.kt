@@ -13,8 +13,8 @@ class SplunkHEC {
     companion object {
         // private const val host = "http://10.0.2.2"       // emulator localhost
         private const val host = "http://192.168.0.190"     // smartphone localhost
-        private const val url = "$host:8088/services/collector/raw"
-        private const val token = "71d16413-38e9-45fc-8240-2d0417dab977"
+        const val url = "$host:8088/services/collector/raw"
+        const val token = "71d16413-38e9-45fc-8240-2d0417dab977"
 
         fun getMetaBody(): JSONObject {
             val body = JSONObject()

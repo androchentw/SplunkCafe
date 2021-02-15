@@ -9,8 +9,23 @@ import java.time.ZoneId
 import java.time.format.DateTimeFormatter
 import kotlin.math.abs
 
-class Scale private constructor() {
+class Scale {
+    
+    interface OnWeightUpdateEvent {
+        fun onUpdate(weight: Float)
+    }
+
     companion object {
+        private var mOnWeightUpdateEvent: OnWeightUpdateEvent = object : OnWeightUpdateEvent {
+            override fun onUpdate(weight: Float) {
+                AnLog.dn("$weight")
+            }
+        }
+
+        fun register(event: OnWeightUpdateEvent) {
+            mOnWeightUpdateEvent = event
+        }
+
         @SuppressLint("StaticFieldLeak")
         private lateinit var skaleHelper : SkaleHelper
         const val REQUEST_BT_PERMISSION = 9999
@@ -35,10 +50,9 @@ class Scale private constructor() {
                     // invoked when weight value notified from skale
                     // unit of gram.
                     val df = DecimalFormat("#.#")
-                    var weight = df.format(weight).toFloat()
-                    if (!isJitter(latestWeight, weight)) {
-                        latestWeight = weight
-                        sendEvent(weight)
+                    val w = df.format(weight).toFloat()
+                    if (!isJitter(latestWeight, w)) {
+                        sendEvent(w)
                     };
                 }
 
@@ -99,6 +113,7 @@ class Scale private constructor() {
         }
 
         private fun setScaleSessionId() {
+            sendEvent(0.0f)
             scaleSessionId = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ssZ")
                 .withZone(ZoneId.systemDefault())
                 .format(Instant.now())
@@ -106,6 +121,10 @@ class Scale private constructor() {
 
         private fun resetScaleSessionId() {
             scaleSessionId = "NA"
+        }
+
+        fun getWeight(): Float {
+            return latestWeight;
         }
 
         fun resume() {
@@ -120,6 +139,8 @@ class Scale private constructor() {
         }
 
         private fun sendEvent(weight: Float) {
+            latestWeight = weight
+            mOnWeightUpdateEvent.onUpdate(weight)
             val body = SplunkHEC.getMetaBody()
             body.put("id", getScaleId())
             body.put("weight", weight)

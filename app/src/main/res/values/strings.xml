@@ -10,4 +10,8 @@
     <string name="menu_home">Home</string>
     <string name="menu_gallery">Gallery</string>
     <string name="menu_slideshow">Slideshow</string>
+    <string name="tv_splunk_url">Splunk Url: %1$s</string>
+    <string name="tv_splunk_token">Splunk HEC Token: %1$s</string>
+    <string name="tv_scale_weight">Scale Weight: %1$f</string>
+    <string name="btn_scale_reconnect">Scale Reconnect</string>
 </resources>
