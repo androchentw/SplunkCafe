@@ -13,6 +13,8 @@ import androidx.navigation.ui.setupWithNavController
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
+import tw.androchen.splunkcafe.util.AnLog
+import tw.androchen.splunkcafe.util.Scale
 
 class MainActivity : AppCompatActivity() {
 
@@ -38,6 +40,7 @@ class MainActivity : AppCompatActivity() {
                 R.id.nav_home, R.id.nav_gallery, R.id.nav_slideshow), drawerLayout)
         setupActionBarWithNavController(navController, appBarConfiguration)
         navView.setupWithNavController(navController)
+        Scale.setupSkale(this)
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -49,5 +52,25 @@ class MainActivity : AppCompatActivity() {
     override fun onSupportNavigateUp(): Boolean {
         val navController = findNavController(R.id.nav_host_fragment)
         return navController.navigateUp(appBarConfiguration) || super.onSupportNavigateUp()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        Scale.resume()
+    }
+
+    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
+        if (requestCode == Scale.REQUEST_BT_PERMISSION) {
+            val result = Scale.checkPermissionRequest(requestCode, permissions, grantResults)
+
+            if (result) {
+                AnLog.d("checkPermissionRequest: $result")
+                Scale.resume()
+            } else {
+                AnLog.e("No bluetooth permission")
+            }
+        } else {
+            super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        }
     }
 }
