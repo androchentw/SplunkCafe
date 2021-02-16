@@ -9,4 +9,4 @@ An open source app to demonstrate
 1. Collecting from Bluetooth Scale - [Skale II](https://github.com/atomaxinc/SkaleKitAndroid)
 2. Send data to [Splunk](https://www.splunk.com/) Enterprise localhost via HEC (Http Event Collector)
 
-Check [Slideshare](https://www.slideshare.net/secret/BlQiVHNlmnY9e9) for more detail.
+Check [Speaker Deck](https://speakerdeck.com/androchentw/2021-02-17-splunk-cafe) for more detail.
